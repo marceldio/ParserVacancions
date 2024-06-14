@@ -76,3 +76,55 @@ def create_base(base_name: str, params: dict):
     conn.commit()
     conn.close()
 
+
+def save_base(data: List[Dict[str, Any]], base_name: str, params: dict):
+    """Функция для сохранения информации в созданную БД.
+
+    Args:
+        data (List[Dict[str, Any]]): Список словарей, содержащих информацию о работодателях и вакансиях.
+        base_name (str): Имя базы данных, в которую нужно сохранить данные.
+
+    Подключается к базе данных, извлекает данные о работодателях и их вакансиях из переданного списка,
+    и сохраняет их в таблицы 'employers' и 'vacancies' соответственно.
+    """
+    conn = psycopg2.connect(dbname=base_name, **params)
+
+    with conn.cursor() as cur:
+        for text in data:
+            employer_info = text['employers']
+
+            cur.execute(
+                """
+                INSERT INTO employers (company_name, open_vacancies, employer_url, description)
+                VALUES (%s, %s, %s, %s)
+                RETURNING employer_id
+                """,
+                (employer_info['name'], employer_info['open_vacancies'], employer_info['alternate_url'],
+                 employer_info['description'])
+            )
+
+            employer_id = cur.fetchone()[0]
+
+            vacancies = text['vacancies']
+            for vacancy in vacancies:
+                if vacancy['salary'] is None:
+                    cur.execute(
+                        """
+                        INSERT INTO vacancies (employer_id, vacancy_name, salary_from, vacancy_url)
+                        VALUES (%s, %s, %s, %s)
+                        """,
+                        (employer_id, vacancy['name'], 0,
+                         vacancy['alternate_url'])
+                    )
+                else:
+                    cur.execute(
+                        """
+                        INSERT INTO vacancies (employer_id, vacancy_name, salary_from, vacancy_url)
+                        VALUES (%s, %s, %s, %s)
+                        """,
+                        (employer_id, vacancy['name'], vacancy['salary']['from'],
+                         vacancy['alternate_url'])
+                    )
+
+    conn.commit()
+    conn.close()
