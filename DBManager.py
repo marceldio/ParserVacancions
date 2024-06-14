@@ -29,5 +29,15 @@ class DBManager:
         return self.cur.fetchall()
 
 
+    def get_avg_salary(self):
+        """
+        Получает среднюю зарплату по всем вакансиям.
+
+        :return: List of tuples with average salary value.
+        """
+        self.cur.execute(f"select avg(salary_from) from vacancies")
+        return self.cur.fetchall()
+
+
 
 
