@@ -39,5 +39,12 @@ class DBManager:
         return self.cur.fetchall()
 
 
+    def get_vacancies_with_higher_salary(self):
+        """
+        Получает список всех вакансий, у которых зарплата выше средней.
 
-
+        :return: List of tuples with vacancy name and salary for vacancies with salary above average.
+        """
+        self.cur.execute(f"select vacancy_name, salary_from from vacancies group by vacancy_name, "
+                         f"salary_from having salary_from > (select avg(salary_from) from vacancies)")
+        return self.cur.fetchall()
