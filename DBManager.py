@@ -7,7 +7,6 @@ class DBManager:
         self.conn = psycopg2.connect(dbname='hh', **params)
         self.cur = self.conn.cursor()
 
-
     def get_companies_and_vacancies_count(self):
         """
         Получает список всех компаний с количеством открытых вакансий.
@@ -16,7 +15,6 @@ class DBManager:
         """
         self.cur.execute(f"SELECT company_name, open_vacancies FROM employers")
         return self.cur.fetchall()
-
 
     def get_all_vacancies(self):
         """
@@ -28,7 +26,6 @@ class DBManager:
                          f"vacancies.vacancy_url from vacancies join employers using(employer_id)")
         return self.cur.fetchall()
 
-
     def get_avg_salary(self):
         """
         Получает среднюю зарплату по всем вакансиям.
@@ -37,7 +34,6 @@ class DBManager:
         """
         self.cur.execute(f"select avg(salary_from) from vacancies")
         return self.cur.fetchall()
-
 
     def get_vacancies_with_higher_salary(self):
         """
@@ -48,7 +44,6 @@ class DBManager:
         self.cur.execute(f"select vacancy_name, salary_from from vacancies group by vacancy_name, "
                          f"salary_from having salary_from > (select avg(salary_from) from vacancies)")
         return self.cur.fetchall()
-
 
     def get_vacancies_with_keyword(self):
         """
