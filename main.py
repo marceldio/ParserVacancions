@@ -6,7 +6,6 @@ from DBManager import DBManager
 def main():
 
     company_list = [
-                '95255',
                 '5136148',
                 '999442',
                 '1050336',
