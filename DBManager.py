@@ -45,12 +45,22 @@ class DBManager:
                          f"salary_from having salary_from > (select avg(salary_from) from vacancies)")
         return self.cur.fetchall()
 
-    def get_vacancies_with_keyword(self):
+    # def get_vacancies_with_keyword(self):    -- ++++
+    #     """
+    #     Получает список всех вакансий, в названии которых содержится переданное ключевое слово.
+    #
+    #     :params keyword: Keyword to search in job titles.
+    #     :return: List of tuples with company name, job title, salary, and URL for matching vacancies.
+    #     """
+    #     self.cur.execute(f"select * from vacancies where vacancy_name LIKE 'О%';")
+    #     return self.cur.fetchall()
+
+    def get_vacancies_with_keyword(self, word):
         """
         Получает список всех вакансий, в названии которых содержится переданное ключевое слово.
 
         :params keyword: Keyword to search in job titles.
         :return: List of tuples with company name, job title, salary, and URL for matching vacancies.
         """
-        self.cur.execute(f"select * from vacancies where vacancy_name LIKE 'О%';")
+        self.cur.execute(f"select * from vacancies where vacancy_name LIKE '%{word}%';")
         return self.cur.fetchall()

@@ -35,7 +35,7 @@ def main():
     m.get_all_vacancies()
     m.get_avg_salary()
     m.get_vacancies_with_higher_salary()
-    m.get_vacancies_with_keyword()
+    m.get_vacancies_with_keyword('python')
 
 
 if __name__ == '__main__':
