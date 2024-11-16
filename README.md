@@ -1,5 +1,5 @@
 Project for obtaining data on companies and vacancies
-# pars_vac_bd
+# parser vacancions
 Проект по получению данных о компаниях и вакансиях.
 
 Получаем данные о работодателях и их вакансиях с сайта hh.ru. 
